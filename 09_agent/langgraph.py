@@ -22,6 +22,10 @@ class State(BaseModel):
 
 from langgraph.graph import StateGraph
 from typing import Any
+from langchain_core.runnables import RunnablePassthrough
+from langchain_core.output_parsers import StrOutputParser
+
+
 
 # ノード関数の実装
 def answering_node(state: State) -> dict[str, Any]:
@@ -35,5 +39,18 @@ def answering_node(state: State) -> dict[str, Any]:
 workflow = StateGraph(State) # ステートグラフの初期化
 workflow.add_node("answering",answering_node) # ノードの追加
 
+prompt = ''
+llm = ''
 
-
+answering_node = (
+  RunnablePassthrough.assign(
+    query=lambda state: state.query,    
+    role=lambda state: state.role
+  )
+  | prompt
+  | llm
+  | StrOutputParser()
+  | RunnablePassthrough.assign(
+    messages=lambda x: [x]
+  )
+)
