@@ -21,7 +21,19 @@ class State(BaseModel):
   )
 
 from langgraph.graph import StateGraph
+from typing import Any
 
-workflow = StateGraph(State)
+# ノード関数の実装
+def answering_node(state: State) -> dict[str, Any]:
+  query = state.query
+  role = state.current_role
 
-workflow.add_node(answering_node)
+  # ユーザーからの質問内容と選択されたロールをもとに回答を生成するロジック
+  generated_message = '' 
+  return { "messages": [generated_message]}
+
+workflow = StateGraph(State) # ステートグラフの初期化
+workflow.add_node("answering",answering_node) # ノードの追加
+
+
+
