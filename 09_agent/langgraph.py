@@ -19,3 +19,7 @@ class State(BaseModel):
   judgement_reason: str = Field(
     default='', description='品質チェックの判定理由'
   )
+
+from langgraph.graph import StateGraph
+
+workflow = StateGraph(State)
