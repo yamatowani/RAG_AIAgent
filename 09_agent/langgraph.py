@@ -23,3 +23,5 @@ class State(BaseModel):
 from langgraph.graph import StateGraph
 
 workflow = StateGraph(State)
+
+workflow.add_node(answering_node)
